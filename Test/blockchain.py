@@ -3,7 +3,11 @@ import json
 from time import time
 
 
+<<<<<<< HEAD
 #source: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46  #Test2
+=======
+#source: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46              # Test 3   # Test 4
+>>>>>>> 00b1bc960e2802c3f09b09fdacb8f946b8e5cd4d
 class Blockchain(object):
     
     def __init__(self):
