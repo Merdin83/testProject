@@ -3,7 +3,7 @@ import json
 from time import time
 
 
-
+#source: https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
 class Blockchain(object):
     
     def __init__(self):
@@ -15,7 +15,7 @@ class Blockchain(object):
         
         
     #-------------------------------------------------------------------------#
-    def new_block(self, proof, previous_hash=none):
+    def new_block(self, proof, previous_hash=None):
         
         """
         Create a new Block in the Blockchain
@@ -58,9 +58,9 @@ class Blockchain(object):
         })
         
         return self.last_block['index'] + 1
+        
     #-------------------------------------------------------------------------#
         
-       
     @property
     def last_block(self):
         return self.chain[-1]
@@ -76,11 +76,39 @@ class Blockchain(object):
         :return: <str>
         """
     
-    # We must make sure that the Dictionary is Ordered, or we'll have invonsistent hashes
-    block_string = json.dumps(block, sort_keys=True).encode()
-    return hashlib.sha256(block_string).hexdigest()
+        # We must make sure that the Dictionary is Ordered, or we'll have invonsistent hashes
+        block_string = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(block_string).hexdigest()
 
+    #-------------------------------------------------------------------------#
+    def prof_of_work(self, last_proof):
+        """
+        Simple Proof Of Work Algorithm:
+        - Find a number p' such that hash(pp') contains leading 4 zeros, where p is the previous p'
+        - p is the previous proof, and p' is the new proof
+        
+        :param last_proof: <int>
+        :return: <int>
+        """
+        proof = 0
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+    
+        return proof
+        
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        """
+        Validates the Proof: Does hash(last_proof) contain 4 leading zeros?
+        
+        :param last_proof: <int> Previous Proof
+        :param proof: <int> Current Proof
+        :return: <bool> True if correct, False if not.
+        """
+        
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4] == "0000"
 
- 
-
+    #-------------------------------------------------------------------------#
     
